@@ -42,7 +42,7 @@ export default function CheckoutForm({ onSuccess }) {
 
     try {
       const { data } = await api.post('/api/stripe/create-payment-intent', {
-        items: items.map(i => ({ productId: i._id, qty: i.qty })),
+        items: items.map(i => ({ productId: i.id, qty: i.qty })),
         customerName: form.customerName,
         customerEmail: form.customerEmail,
         shippingAddress: {

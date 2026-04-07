@@ -62,7 +62,7 @@ export default function OrderManager() {
             </thead>
             <tbody>
               {filtered.map((o) => (
-                <tr key={o._id} className="border-b border-white/5 hover:bg-white/5">
+                <tr key={o.id} className="border-b border-white/5 hover:bg-white/5">
                   <td className="p-4 font-mono">{new Date(o.createdAt).toLocaleDateString('fr-FR')}</td>
                   <td className="p-4">{o.customerName}</td>
                   <td className="p-4 text-rm-muted">{o.items?.length || 0} article(s)</td>
@@ -84,7 +84,7 @@ export default function OrderManager() {
                       </button>
                       {o.status === 'paid' && (
                         <button
-                          onClick={() => statusMut.mutate({ id: o._id, status: 'shipped' })}
+                          onClick={() => statusMut.mutate({ id: o.id, status: 'shipped' })}
                           className="text-xs bg-rm-light-blue/20 text-rm-light-blue px-2 py-1 rounded hover:bg-rm-light-blue/30 transition-colors"
                         >
                           Expédier
@@ -92,7 +92,7 @@ export default function OrderManager() {
                       )}
                       {o.status === 'shipped' && (
                         <button
-                          onClick={() => statusMut.mutate({ id: o._id, status: 'delivered' })}
+                          onClick={() => statusMut.mutate({ id: o.id, status: 'delivered' })}
                           className="text-xs bg-purple-500/20 text-purple-400 px-2 py-1 rounded hover:bg-purple-500/30 transition-colors"
                         >
                           Livré

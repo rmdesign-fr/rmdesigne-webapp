@@ -16,7 +16,7 @@ export default function Cart() {
   return (
     <div className="space-y-4">
       {items.map((item) => (
-        <div key={item._id} className="flex items-center gap-4 py-3 border-b border-white/10">
+        <div key={item.id} className="flex items-center gap-4 py-3 border-b border-white/10">
           <img
             src={item.images?.[0] || 'https://via.placeholder.com/60'}
             alt={item.name}
@@ -28,21 +28,21 @@ export default function Cart() {
           </div>
           <div className="flex items-center gap-2">
             <button
-              onClick={() => updateQty(item._id, item.qty - 1)}
+              onClick={() => updateQty(item.id, item.qty - 1)}
               className="w-7 h-7 rounded-md bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors"
             >
               <HiMinus className="text-xs" />
             </button>
             <span className="text-sm font-mono w-6 text-center">{item.qty}</span>
             <button
-              onClick={() => updateQty(item._id, item.qty + 1)}
+              onClick={() => updateQty(item.id, item.qty + 1)}
               className="w-7 h-7 rounded-md bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors"
             >
               <HiPlus className="text-xs" />
             </button>
           </div>
           <button
-            onClick={() => removeItem(item._id)}
+            onClick={() => removeItem(item.id)}
             className="text-rm-muted hover:text-rm-danger transition-colors"
           >
             <HiTrash />

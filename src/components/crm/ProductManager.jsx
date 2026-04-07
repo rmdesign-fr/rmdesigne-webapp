@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { getProducts, createProduct, updateProduct, deleteProduct } from '../../services/productService'
+import { getProductsAdmin, createProduct, updateProduct, deleteProduct } from '../../services/productService'
 import Button from '../ui/Button'
 import Modal from '../ui/Modal'
 import { HiPencil, HiTrash, HiPlus } from 'react-icons/hi'
@@ -14,7 +14,7 @@ export default function ProductManager() {
 
   const { data: products, isLoading } = useQuery({
     queryKey: ['admin-products-all'],
-    queryFn: () => getProducts(),
+    queryFn: () => getProductsAdmin(),
   })
 
   const createMut = useMutation({
@@ -52,7 +52,7 @@ export default function ProductManager() {
     if (files) Array.from(files).forEach(f => fd.append('images', f))
     if (editing) {
       if (editing.images) editing.images.forEach(img => fd.append('existingImages', img))
-      updateMut.mutate({ id: editing._id, fd })
+      updateMut.mutate({ id: editing.id, fd })
     } else {
       createMut.mutate(fd)
     }
@@ -83,7 +83,7 @@ export default function ProductManager() {
             </thead>
             <tbody>
               {products?.map((p) => (
-                <tr key={p._id} className="border-b border-white/5 hover:bg-white/5">
+                <tr key={p.id} className="border-b border-white/5 hover:bg-white/5">
                   <td className="p-4">
                     <img src={p.images?.[0] || 'https://via.placeholder.com/40'} alt="" className="w-10 h-10 rounded-lg object-cover" />
                   </td>
@@ -101,7 +101,7 @@ export default function ProductManager() {
                       <button onClick={() => openEdit(p)} className="text-rm-light-blue hover:text-white transition-colors">
                         <HiPencil />
                       </button>
-                      <button onClick={() => deleteMut.mutate(p._id)} className="text-rm-danger hover:text-red-400 transition-colors">
+                      <button onClick={() => deleteMut.mutate(p.id)} className="text-rm-danger hover:text-red-400 transition-colors">
                         <HiTrash />
                       </button>
                     </div>

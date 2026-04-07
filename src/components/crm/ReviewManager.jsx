@@ -46,7 +46,7 @@ export default function ReviewManager() {
 
       <div className="space-y-4">
         {reviews?.map((r) => (
-          <div key={r._id} className="glass-card p-5 rounded-xl">
+          <div key={r.id} className="glass-card p-5 rounded-xl">
             <div className="flex items-start justify-between">
               <div className="flex-1">
                 <div className="flex items-center gap-3 mb-2">
@@ -61,16 +61,16 @@ export default function ReviewManager() {
               </div>
               <div className="flex gap-2 ml-4">
                 {!r.approved && (
-                  <button onClick={() => approveMut.mutate({ id: r._id, approved: true })} className="text-rm-success hover:text-green-400 transition-colors" title="Approuver">
+                  <button onClick={() => approveMut.mutate({ id: r.id, approved: true })} className="text-rm-success hover:text-green-400 transition-colors" title="Approuver">
                     <HiCheck className="text-lg" />
                   </button>
                 )}
                 {r.approved && (
-                  <button onClick={() => approveMut.mutate({ id: r._id, approved: false })} className="text-yellow-500 hover:text-yellow-400 transition-colors" title="Retirer">
+                  <button onClick={() => approveMut.mutate({ id: r.id, approved: false })} className="text-yellow-500 hover:text-yellow-400 transition-colors" title="Retirer">
                     <HiX className="text-lg" />
                   </button>
                 )}
-                <button onClick={() => deleteMut.mutate(r._id)} className="text-rm-danger hover:text-red-400 transition-colors" title="Supprimer">
+                <button onClick={() => deleteMut.mutate(r.id)} className="text-rm-danger hover:text-red-400 transition-colors" title="Supprimer">
                   <HiTrash className="text-lg" />
                 </button>
               </div>

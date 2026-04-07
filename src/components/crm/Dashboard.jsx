@@ -51,7 +51,7 @@ export default function Dashboard() {
             </thead>
             <tbody>
               {bookings?.slice(0, 5).map((b) => (
-                <tr key={b._id} className="border-b border-white/5">
+                <tr key={b.id} className="border-b border-white/5">
                   <td className="py-3 font-mono">{new Date(b.date).toLocaleDateString('fr-FR')}</td>
                   <td className="py-3 font-mono">{b.time}</td>
                   <td className="py-3">{b.name}</td>
@@ -90,7 +90,7 @@ export default function Dashboard() {
             </thead>
             <tbody>
               {orders?.slice(0, 5).map((o) => (
-                <tr key={o._id} className="border-b border-white/5">
+                <tr key={o.id} className="border-b border-white/5">
                   <td className="py-3 font-mono">{new Date(o.createdAt).toLocaleDateString('fr-FR')}</td>
                   <td className="py-3">{o.customerName}</td>
                   <td className="py-3 font-mono text-rm-pink">{o.total?.toFixed(2)} €</td>

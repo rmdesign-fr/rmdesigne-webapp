@@ -42,7 +42,7 @@ export default function BookingManager() {
             </thead>
             <tbody>
               {bookings?.map((b) => (
-                <tr key={b._id} className="border-b border-white/5 hover:bg-white/5">
+                <tr key={b.id} className="border-b border-white/5 hover:bg-white/5">
                   <td className="p-4 font-mono">{new Date(b.date).toLocaleDateString('fr-FR')}</td>
                   <td className="p-4 font-mono">{b.time}</td>
                   <td className="p-4">{b.name}</td>
@@ -62,16 +62,16 @@ export default function BookingManager() {
                         <HiEye />
                       </button>
                       {b.status === 'pending' && (
-                        <button onClick={() => statusMut.mutate({ id: b._id, status: 'confirmed' })} className="text-rm-success hover:text-green-400 transition-colors" title="Confirmer">
+                        <button onClick={() => statusMut.mutate({ id: b.id, status: 'confirmed' })} className="text-rm-success hover:text-green-400 transition-colors" title="Confirmer">
                           <HiCheck />
                         </button>
                       )}
                       {b.status !== 'cancelled' && (
-                        <button onClick={() => statusMut.mutate({ id: b._id, status: 'cancelled' })} className="text-yellow-500 hover:text-yellow-400 transition-colors" title="Annuler">
+                        <button onClick={() => statusMut.mutate({ id: b.id, status: 'cancelled' })} className="text-yellow-500 hover:text-yellow-400 transition-colors" title="Annuler">
                           <HiX />
                         </button>
                       )}
-                      <button onClick={() => deleteMut.mutate(b._id)} className="text-rm-danger hover:text-red-400 transition-colors" title="Supprimer">
+                      <button onClick={() => deleteMut.mutate(b.id)} className="text-rm-danger hover:text-red-400 transition-colors" title="Supprimer">
                         <HiTrash />
                       </button>
                     </div>
