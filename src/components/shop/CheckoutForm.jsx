@@ -1,26 +1,13 @@
 import { useState } from 'react'
-import { useStripe, useElements, CardElement } from '@stripe/react-stripe-js'
-import Button from '../ui/Button'
+import { PayPalButtons } from '@paypal/react-paypal-js'
 import api from '../../services/api'
 import useCartStore from '../../store/cartStore'
 
-const cardStyle = {
-  style: {
-    base: {
-      color: '#ffffff',
-      fontFamily: '"DM Sans", sans-serif',
-      fontSize: '16px',
-      '::placeholder': { color: '#a0a0b8' },
-    },
-    invalid: { color: '#ef4444' },
-  },
-}
+const inputCls =
+  'w-full bg-[#1a1a1a] border border-white/10 rounded-lg px-4 py-3 text-white placeholder-rm-muted focus:outline-none focus:border-rm-pink transition-colors'
 
 export default function CheckoutForm({ onSuccess }) {
-  const stripe = useStripe()
-  const elements = useElements()
-  const { items, getTotal, clearCart } = useCartStore()
-  const total = getTotal()
+  const { items, clearCart } = useCartStore()
 
   const [form, setForm] = useState({
     customerName: '',
@@ -30,19 +17,33 @@ export default function CheckoutForm({ onSuccess }) {
     postalCode: '',
     country: 'FR',
   })
-  const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    if (!stripe || !elements) return
+  const isFormValid =
+    form.customerName.trim().length >= 2 &&
+    /\S+@\S+\.\S+/.test(form.customerEmail) &&
+    form.line1.trim().length >= 2 &&
+    form.city.trim().length >= 2 &&
+    form.postalCode.trim().length >= 2
 
-    setLoading(true)
+  const set = (field) => (e) => setForm((f) => ({ ...f, [field]: e.target.value }))
+
+  /** Called by PayPal SDK to create an order on our backend */
+  const createOrder = async () => {
+    if (!isFormValid) throw new Error('Formulaire incomplet')
     setError('')
+    const { data } = await api.post('/api/paypal/create-order', {
+      items: items.map((i) => ({ productId: i.id, qty: i.qty })),
+    })
+    return data.id
+  }
 
+  /** Called after buyer approves on PayPal */
+  const onApprove = async (paypalData) => {
     try {
-      const { data } = await api.post('/api/stripe/create-payment-intent', {
-        items: items.map(i => ({ productId: i.id, qty: i.qty })),
+      setError('')
+      await api.post('/api/paypal/capture-order', {
+        paypalOrderId: paypalData.orderID,
         customerName: form.customerName,
         customerEmail: form.customerEmail,
         shippingAddress: {
@@ -51,91 +52,76 @@ export default function CheckoutForm({ onSuccess }) {
           postalCode: form.postalCode,
           country: form.country,
         },
+        items: items.map((i) => ({ productId: i.id, qty: i.qty })),
       })
-
-      const { error: stripeError } = await stripe.confirmCardPayment(data.clientSecret, {
-        payment_method: {
-          card: elements.getElement(CardElement),
-          billing_details: {
-            name: form.customerName,
-            email: form.customerEmail,
-          },
-        },
-      })
-
-      if (stripeError) {
-        setError(stripeError.message)
-      } else {
-        clearCart()
-        onSuccess()
-      }
+      clearCart()
+      onSuccess()
     } catch (err) {
-      setError(err.response?.data?.message || 'Une erreur est survenue')
-    } finally {
-      setLoading(false)
+      setError(err.response?.data?.message || 'Erreur lors de la capture du paiement')
     }
   }
 
+  const onError = (err) => {
+    console.error('PayPal error', err)
+    setError('Une erreur PayPal est survenue. Veuillez réessayer.')
+  }
+
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="space-y-4">
       <input
         type="text"
         placeholder="Nom complet *"
         value={form.customerName}
-        onChange={e => setForm({ ...form, customerName: e.target.value })}
-        required
-        className="w-full bg-[#1a1a1a] border border-white/10 rounded-lg px-4 py-3 text-white placeholder-rm-muted focus:outline-none focus:border-rm-pink transition-colors"
+        onChange={set('customerName')}
+        className={inputCls}
       />
       <input
         type="email"
         placeholder="Email *"
         value={form.customerEmail}
-        onChange={e => setForm({ ...form, customerEmail: e.target.value })}
-        required
-        className="w-full bg-[#1a1a1a] border border-white/10 rounded-lg px-4 py-3 text-white placeholder-rm-muted focus:outline-none focus:border-rm-pink transition-colors"
+        onChange={set('customerEmail')}
+        className={inputCls}
       />
       <input
         type="text"
         placeholder="Adresse de livraison *"
         value={form.line1}
-        onChange={e => setForm({ ...form, line1: e.target.value })}
-        required
-        className="w-full bg-[#1a1a1a] border border-white/10 rounded-lg px-4 py-3 text-white placeholder-rm-muted focus:outline-none focus:border-rm-pink transition-colors"
+        onChange={set('line1')}
+        className={inputCls}
       />
       <div className="grid grid-cols-2 gap-4">
         <input
           type="text"
           placeholder="Ville *"
           value={form.city}
-          onChange={e => setForm({ ...form, city: e.target.value })}
-          required
-          className="w-full bg-[#1a1a1a] border border-white/10 rounded-lg px-4 py-3 text-white placeholder-rm-muted focus:outline-none focus:border-rm-pink transition-colors"
+          onChange={set('city')}
+          className={inputCls}
         />
         <input
           type="text"
           placeholder="Code postal *"
           value={form.postalCode}
-          onChange={e => setForm({ ...form, postalCode: e.target.value })}
-          required
-          className="w-full bg-[#1a1a1a] border border-white/10 rounded-lg px-4 py-3 text-white placeholder-rm-muted focus:outline-none focus:border-rm-pink transition-colors"
+          onChange={set('postalCode')}
+          className={inputCls}
         />
       </div>
 
-      <div className="bg-[#1a1a1a] border border-white/10 rounded-lg px-4 py-4">
-        <CardElement options={cardStyle} />
+      {error && <p className="text-red-400 text-sm">{error}</p>}
+
+      <div className={!isFormValid ? 'opacity-40 pointer-events-none select-none' : ''}>
+        <PayPalButtons
+          style={{ layout: 'vertical', color: 'gold', shape: 'rect', label: 'pay' }}
+          createOrder={createOrder}
+          onApprove={onApprove}
+          onError={onError}
+        />
       </div>
 
-      {error && <p className="text-rm-danger text-sm">{error}</p>}
-
-      <Button
-        type="submit"
-        variant="primary"
-        fullWidth
-        disabled={!stripe || loading}
-        className="py-4 text-lg"
-      >
-        {loading ? 'Traitement...' : `Payer ${total.toFixed(2)} €`}
-      </Button>
-    </form>
+      {!isFormValid && (
+        <p className="text-rm-muted text-xs text-center">
+          Remplissez tous les champs pour activer le bouton PayPal.
+        </p>
+      )}
+    </div>
   )
 }
