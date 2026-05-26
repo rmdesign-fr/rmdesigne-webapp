@@ -6,7 +6,9 @@ import useCartStore from '../store/cartStore'
 import Cart from '../components/shop/Cart'
 import { useNavigate } from 'react-router-dom'
 
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY)
+const stripePromise = import.meta.env.VITE_STRIPE_PUBLIC_KEY
+  ? loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY)
+  : Promise.resolve(null)
 
 export default function CheckoutPage() {
   const { items, getTotal } = useCartStore()
