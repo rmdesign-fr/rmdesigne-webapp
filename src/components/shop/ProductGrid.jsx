@@ -1,6 +1,8 @@
 import ProductCard from './ProductCard'
 
 export default function ProductGrid({ products, loading }) {
+  const safeProducts = Array.isArray(products) ? products : []
+
   if (loading) {
     return (
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -18,7 +20,7 @@ export default function ProductGrid({ products, loading }) {
     )
   }
 
-  if (!products?.length) {
+  if (safeProducts.length === 0) {
     return (
       <div className="text-center py-16">
         <p className="text-rm-muted text-lg">Aucun produit disponible pour le moment.</p>
@@ -28,7 +30,7 @@ export default function ProductGrid({ products, loading }) {
 
   return (
     <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {products.map((product) => (
+      {safeProducts.map((product) => (
         <ProductCard key={product.id} product={product} />
       ))}
     </div>

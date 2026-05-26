@@ -22,7 +22,7 @@ export default function DevisPage() {
       setSelectedTime(null)
       try {
         const data = await getAvailableSlots(format(selectedDate, 'yyyy-MM-dd'))
-        setSlots(data.slots)
+        setSlots(Array.isArray(data?.slots) ? data.slots : [])
       } catch (err) {
         setSlots([])
       } finally {

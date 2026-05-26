@@ -2,6 +2,8 @@ import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 
 export default function TimeSlotGrid({ selectedDate, slots, selectedTime, onTimeSelect, loading }) {
+  const safeSlots = Array.isArray(slots) ? slots : []
+
   if (!selectedDate) {
     return (
       <div className="bg-[#1a1a1a] rounded-xl p-6 flex items-center justify-center min-h-[200px]">
@@ -22,11 +24,11 @@ export default function TimeSlotGrid({ selectedDate, slots, selectedTime, onTime
         <div className="flex items-center justify-center py-8">
           <div className="w-8 h-8 border-2 border-rm-pink border-t-transparent rounded-full animate-spin" />
         </div>
-      ) : slots.length === 0 ? (
+      ) : safeSlots.length === 0 ? (
         <p className="text-rm-muted text-center py-8">Aucun créneau disponible pour cette date</p>
       ) : (
         <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
-          {slots.map((slot) => (
+          {safeSlots.map((slot) => (
             <button
               key={slot}
               onClick={() => onTimeSelect(slot)}
