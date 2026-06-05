@@ -1,6 +1,6 @@
 import { NavLink, useNavigate } from 'react-router-dom'
 import { FaCog } from 'react-icons/fa'
-import { HiChartBar, HiCube, HiCalendar, HiStar, HiShoppingCart, HiLogout } from 'react-icons/hi'
+import { HiChartBar, HiCube, HiCalendar, HiStar, HiShoppingCart, HiLogout, HiPhotograph, HiMail } from 'react-icons/hi'
 import useAuthStore from '../../store/authStore'
 
 const NAV_ITEMS = [
@@ -9,6 +9,8 @@ const NAV_ITEMS = [
   { icon: HiCalendar, label: 'Réservations', to: '/admin/bookings' },
   { icon: HiStar, label: 'Avis clients', to: '/admin/reviews' },
   { icon: HiShoppingCart, label: 'Commandes', to: '/admin/orders' },
+  { icon: HiPhotograph, label: 'Galeries Services', to: '/admin/services' },
+  { icon: HiMail, label: 'Messages Contact', to: '/admin/contacts' },
 ]
 
 export default function Sidebar() {

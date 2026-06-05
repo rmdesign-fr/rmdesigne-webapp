@@ -7,6 +7,8 @@ import ProductManager from '../components/crm/ProductManager'
 import BookingManager from '../components/crm/BookingManager'
 import ReviewManager from '../components/crm/ReviewManager'
 import OrderManager from '../components/crm/OrderManager'
+import ServiceGalleryManager from '../components/crm/ServiceGalleryManager'
+import ContactManager from '../components/crm/ContactManager'
 
 export default function CrmDashboardPage() {
   const { isAuthenticated, loading } = useAuth()
@@ -38,6 +40,8 @@ export default function CrmDashboardPage() {
           <Route path="bookings" element={<BookingManager />} />
           <Route path="reviews" element={<ReviewManager />} />
           <Route path="orders" element={<OrderManager />} />
+          <Route path="services" element={<ServiceGalleryManager />} />
+          <Route path="contacts" element={<ContactManager />} />
         </Routes>
       </main>
     </div>

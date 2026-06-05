@@ -1,15 +1,18 @@
 import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { getAllReviews, createReview, approveReview, deleteReview } from '../../services/reviewService'
-import { HiCheck, HiX, HiTrash, HiPlus } from 'react-icons/hi'
+import { HiCheck, HiX, HiTrash, HiPlus, HiPencil, HiPhotograph } from 'react-icons/hi'
 import Button from '../ui/Button'
 import Modal from '../ui/Modal'
 import StarRating from '../ui/StarRating'
+import api from '../../services/api'
 
 export default function ReviewManager() {
   const queryClient = useQueryClient()
   const [modalOpen, setModalOpen] = useState(false)
+  const [editingReview, setEditingReview] = useState(null)
   const [form, setForm] = useState({ name: '', service: '', text: '', rating: 5 })
+  const [selectedImages, setSelectedImages] = useState([])
 
   const { data: reviews, isLoading } = useQuery({
     queryKey: ['admin-reviews'],
@@ -27,19 +30,89 @@ export default function ReviewManager() {
   })
 
   const createMut = useMutation({
-    mutationFn: (data) => createReview({ ...data, approved: true }),
+    mutationFn: async (data) => {
+      const formData = new FormData()
+      formData.append('name', data.name)
+      formData.append('service', data.service)
+      formData.append('text', data.text)
+      formData.append('rating', data.rating)
+      formData.append('approved', 'true')
+      
+      selectedImages.forEach((file) => {
+        formData.append('images', file)
+      })
+
+      const response = await api.post('/api/reviews', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
+      return response.data
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin-reviews'] })
       setModalOpen(false)
       setForm({ name: '', service: '', text: '', rating: 5 })
+      setSelectedImages([])
     },
   })
+
+  const updateMut = useMutation({
+    mutationFn: async ({ id, data }) => {
+      const formData = new FormData()
+      formData.append('name', data.name)
+      formData.append('service', data.service)
+      formData.append('text', data.text)
+      formData.append('rating', data.rating)
+      
+      selectedImages.forEach((file) => {
+        formData.append('images', file)
+      })
+
+      const response = await api.put(`/api/reviews/${id}`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
+      return response.data
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin-reviews'] })
+      setEditingReview(null)
+      setForm({ name: '', service: '', text: '', rating: 5 })
+      setSelectedImages([])
+    },
+  })
+
+  const handleEdit = (review) => {
+    setEditingReview(review)
+    setForm({
+      name: review.name,
+      service: review.service,
+      text: review.text,
+      rating: review.rating,
+    })
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    if (editingReview) {
+      updateMut.mutate({ id: editingReview.id, data: form })
+    } else {
+      createMut.mutate(form)
+    }
+  }
+
+  const handleImageChange = (e) => {
+    const files = Array.from(e.target.files || [])
+    setSelectedImages(prev => [...prev, ...files])
+  }
+
+  const removeSelectedImage = (index) => {
+    setSelectedImages(prev => prev.filter((_, i) => i !== index))
+  }
 
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
         <h1 className="font-display text-3xl tracking-wider">Gestion des avis</h1>
-        <Button onClick={() => setModalOpen(true)}>
+        <Button onClick={() => { setModalOpen(true); setEditingReview(null); setForm({ name: '', service: '', text: '', rating: 5 }); setSelectedImages([]) }}>
           <HiPlus className="inline mr-2" /> Ajouter un avis
         </Button>
       </div>
@@ -58,8 +131,18 @@ export default function ReviewManager() {
                 </div>
                 <p className="text-rm-muted text-sm mb-2">"{r.text}"</p>
                 <StarRating rating={r.rating} size="text-sm" />
+                {r.images && r.images.length > 0 && (
+                  <div className="flex gap-2 mt-3">
+                    {r.images.map((img, idx) => (
+                      <img key={idx} src={img} alt="" className="w-16 h-16 object-cover rounded" />
+                    ))}
+                  </div>
+                )}
               </div>
               <div className="flex gap-2 ml-4">
+                <button onClick={() => { handleEdit(r); setModalOpen(true) }} className="text-blue-400 hover:text-blue-300 transition-colors" title="Modifier">
+                  <HiPencil className="text-lg" />
+                </button>
                 {!r.approved && (
                   <button onClick={() => approveMut.mutate({ id: r.id, approved: true })} className="text-rm-success hover:text-green-400 transition-colors" title="Approuver">
                     <HiCheck className="text-lg" />
@@ -83,9 +166,9 @@ export default function ReviewManager() {
         )}
       </div>
 
-      {/* Add Review Modal */}
-      <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)} title="Ajouter un avis">
-        <form onSubmit={(e) => { e.preventDefault(); createMut.mutate(form) }} className="space-y-4">
+      {/* Add/Edit Review Modal */}
+      <Modal isOpen={modalOpen} onClose={() => { setModalOpen(false); setEditingReview(null); setSelectedImages([]) }} title={editingReview ? 'Modifier l\'avis' : 'Ajouter un avis'}>
+        <form onSubmit={handleSubmit} className="space-y-4">
           <input
             type="text" placeholder="Nom du client" value={form.name}
             onChange={e => setForm({ ...form, name: e.target.value })} required
@@ -115,8 +198,45 @@ export default function ReviewManager() {
               ))}
             </div>
           </div>
-          <Button type="submit" fullWidth disabled={createMut.isPending}>
-            Ajouter l'avis
+          
+          {/* Image Upload */}
+          <div>
+            <label className="text-sm text-rm-muted mb-2 block">Images (optionnel)</label>
+            <label className="cursor-pointer flex items-center justify-center gap-2 w-full bg-rm-dark border border-white/10 rounded-lg px-4 py-3 hover:border-rm-pink transition-colors">
+              <HiPhotograph className="text-xl" />
+              <span>Ajouter des images</span>
+              <input
+                type="file"
+                accept="image/*"
+                multiple
+                className="hidden"
+                onChange={handleImageChange}
+              />
+            </label>
+            {selectedImages.length > 0 && (
+              <div className="flex flex-wrap gap-2 mt-2">
+                {selectedImages.map((file, idx) => (
+                  <div key={idx} className="relative">
+                    <img
+                      src={URL.createObjectURL(file)}
+                      alt=""
+                      className="w-20 h-20 object-cover rounded"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removeSelectedImage(idx)}
+                      className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs"
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <Button type="submit" fullWidth disabled={createMut.isPending || updateMut.isPending}>
+            {editingReview ? 'Mettre à jour' : 'Ajouter l\'avis'}
           </Button>
         </form>
       </Modal>

@@ -26,9 +26,9 @@ export default function ContactSection() {
   }
 
   const contactInfo = [
-    { icon: HiLocationMarker, label: 'Paris, Île-de-France, France' },
-    { icon: HiPhone, label: '+33-999-7777-000', href: 'tel:+33999777000' },
-    { icon: HiMail, label: 'mahcin.bidule@gmail.com', href: 'mailto:mahcin.bidule@gmail.com' },
+    { icon: HiLocationMarker, label: '14 Rue Robert Giraudineau, 94300 Vincennes, France' },
+    { icon: HiPhone, label: '+33 7 67 94 29 08', href: 'tel:+33767942908' },
+    { icon: HiMail, label: 'r.mdesignofficiel@gmail.com', href: 'mailto:r.mdesignofficiel@gmail.com' },
     { icon: HiClock, label: 'Lundi au Vendredi - de 8h00 à 19h00' },
   ]
 
@@ -109,7 +109,7 @@ export default function ContactSection() {
         <div className="mt-12 rounded-xl overflow-hidden shadow-md">
           <iframe
             title="R.M_Design Location"
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d83998.94722687619!2d2.2646349!3d48.858370!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e66e1f06e2b70f%3A0x40b82c3688c9460!2sParis%2C%20France!5e0!3m2!1sen!2sus!4v1"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2625.9662736892817!2d2.4316478!3d48.8462089!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e6729b02c3e9e7%3A0x3b9c3e3e3e3e3e3e!2s14%20Rue%20Robert%20Giraudineau%2C%2094300%20Vincennes%2C%20France!5e0!3m2!1sfr!2sfr!4v1"
             width="100%"
             height="350"
             style={{ border: 0 }}

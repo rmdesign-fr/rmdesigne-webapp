@@ -8,6 +8,7 @@ import CheckoutPage from './pages/CheckoutPage'
 import CheckoutSuccessPage from './pages/CheckoutSuccessPage'
 import CrmLoginPage from './pages/CrmLoginPage'
 import CrmDashboardPage from './pages/CrmDashboardPage'
+import ServicePage from './pages/ServicePage'
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="boutique" element={<ShopPage />} />
           <Route path="checkout" element={<CheckoutPage />} />
           <Route path="checkout/success" element={<CheckoutSuccessPage />} />
+          <Route path="services/:slug" element={<ServicePage />} />
         </Route>
         <Route path="/admin/login" element={<CrmLoginPage />} />
         <Route path="/admin/*" element={<CrmDashboardPage />} />

@@ -7,26 +7,31 @@ const SERVICES = [
     title: 'Préparation moteur',
     desc: 'Optimisation moteur pour améliorer puissance, couple et agrément, en toute fiabilité.',
     image: '/assets/preparation-moteur.jpg',
+    link: '/services/preparation-moteur',
   },
   {
     title: 'Sablage / Microbillage',
     desc: 'Nettoyage et restauration de pièces mécaniques pour une base saine, précise et durable.',
-    image: 'https://images.unsplash.com/photo-1530046339160-ce3e530c7d2f?w=600',
+    image: '/assets/atelier-rm.jpg',
+    link: '/services/sablage-microbillage',
   },
   {
     title: 'Peinture automobile',
     desc: 'Peinture complète ou partielle avec préparation soignée et finition professionnelle.',
     image: '/assets/peinture-automobile.jpg',
+    link: '/services/peinture-automobile',
   },
   {
     title: 'Vente auto',
     desc: 'Vente de véhicules restaurés.',
     image: '/assets/hero-car.jpg',
+    link: '/services/vente-auto',
   },
   {
     title: 'Restauration',
     desc: 'Restauration complète des véhicules.',
     image: '/assets/restauration.jpg',
+    link: '/services/restauration',
   },
   {
     title: 'Goodies',

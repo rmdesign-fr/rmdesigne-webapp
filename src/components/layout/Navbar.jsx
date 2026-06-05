@@ -41,11 +41,20 @@ export default function Navbar() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 md:h-20">
             {/* Logo */}
-            <Link to="/" className="flex items-center gap-2 group">
-              <FaCog className="text-white text-2xl group-hover:rotate-180 transition-transform duration-700" />
-              <span className="font-display text-2xl md:text-3xl tracking-wider text-white">
-                R.M_Design
-              </span>
+            <Link to="/" className="flex flex-col group">
+              <div className="flex items-center gap-2">
+                <FaCog className="text-white text-2xl group-hover:rotate-180 transition-transform duration-700" />
+                <span className="font-display text-2xl md:text-3xl tracking-wider text-white">
+                  R.M_Design
+                </span>
+              </div>
+              {/* French Flag Lines */}
+              <div className="flex gap-0.5 mt-1.5 ml-8">
+                <div className="h-1 flex-1 bg-blue-600 border border-gray-800" style={{minWidth: '30px'}} />
+                <div className="h-1 flex-1 bg-white border border-gray-800" style={{minWidth: '30px'}} />
+                <div className="h-1 flex-1 bg-red-600 border border-gray-800" style={{minWidth: '30px'}} />
+              </div>
+              <p className="text-xs text-white/70 mt-1 ml-8">Préparation automobile • Restauration • Performance</p>
             </Link>
 
             {/* Desktop Nav */}
