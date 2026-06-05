@@ -19,7 +19,7 @@ export default function AboutSection() {
           >
             <div className="aspect-[4/3] rounded-xl overflow-hidden shadow-lg">
               <img
-                src="https://images.unsplash.com/photo-1621993202323-f5c258ec8e28?w=800"
+                src="/assets/atelier-rm.jpg"
                 alt="Atelier R.M_Design"
                 className="w-full h-full object-cover"
               />

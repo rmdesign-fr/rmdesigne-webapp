@@ -6,7 +6,7 @@ const SERVICES = [
   {
     title: 'Préparation moteur',
     desc: 'Optimisation moteur pour améliorer puissance, couple et agrément, en toute fiabilité.',
-    image: 'https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=600',
+    image: '/assets/preparation-moteur.jpg',
   },
   {
     title: 'Sablage / Microbillage',
@@ -16,22 +16,22 @@ const SERVICES = [
   {
     title: 'Peinture automobile',
     desc: 'Peinture complète ou partielle avec préparation soignée et finition professionnelle.',
-    image: 'https://images.unsplash.com/photo-1607860108855-64acf2078ed9?w=600',
+    image: '/assets/peinture-automobile.jpg',
   },
   {
     title: 'Vente auto',
     desc: 'Vente de véhicules restaurés.',
-    image: 'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=600',
+    image: '/assets/hero-car.jpg',
   },
   {
     title: 'Restauration',
     desc: 'Restauration complète des véhicules.',
-    image: 'https://images.unsplash.com/photo-1619405399517-d7fce0f13302?w=600',
+    image: '/assets/restauration.jpg',
   },
   {
     title: 'Goodies',
     desc: 'Peinture complète ou partielle avec préparation soignée et finition professionnelle.',
-    image: 'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=600',
+    image: '/assets/goodies.jpg',
     link: '/boutique',
   },
 ]

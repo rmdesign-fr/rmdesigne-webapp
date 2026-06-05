@@ -6,8 +6,8 @@ export default function HeroSection() {
     <section className="relative min-h-[80vh] flex items-center justify-end overflow-hidden">
       {/* Background */}
       <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: "url('/assets/hero-car.png')" }}
+        className="absolute inset-0 bg-cover"
+        style={{ backgroundImage: "url('/assets/hero-car.jpg')", backgroundPosition: 'center 75%' }}
       />
       <div className="absolute inset-0 bg-black/30" />
 
