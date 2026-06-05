@@ -22,7 +22,12 @@ export default function HeroSection() {
           <h1 className="font-display text-5xl md:text-7xl tracking-wider mb-2 text-gray-900">
             R.M_Design
           </h1>
-          <div className="w-16 h-1 bg-rm-light-blue mb-4" />
+          {/* French Flag Lines */}
+          <div className="flex gap-0.5 mb-4">
+            <div className="h-1 flex-1 bg-blue-600 border border-gray-400" style={{minWidth: '30px'}} />
+            <div className="h-1 flex-1 bg-white border border-gray-400" style={{minWidth: '30px'}} />
+            <div className="h-1 flex-1 bg-red-600 border border-gray-400" style={{minWidth: '30px'}} />
+          </div>
           <p className="text-rm-muted text-lg font-body">
             Préparation automobile • Restauration • Performance
           </p>
