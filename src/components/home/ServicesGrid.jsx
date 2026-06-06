@@ -35,7 +35,7 @@ const SERVICES = [
   },
   {
     title: 'Goodies',
-    desc: 'Peinture complète ou partielle avec préparation soignée et finition professionnelle.',
+    desc: 'Merch, stickers et accessoires auto R.M_Design pour afficher votre passion en style premium.',
     image: '/assets/goodies.jpg',
     link: '/boutique',
   },

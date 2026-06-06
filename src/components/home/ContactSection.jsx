@@ -26,7 +26,11 @@ export default function ContactSection() {
   }
 
   const contactInfo = [
-    { icon: HiLocationMarker, label: '14 Rue Robert Giraudineau, 94300 Vincennes, France' },
+    {
+      icon: HiLocationMarker,
+      label: '14 Rue Robert Giraudineau, 94300 Vincennes, France',
+      href: 'https://maps.app.goo.gl/tAUjmnxhVkXf29Yy5',
+    },
     { icon: HiPhone, label: '+33 7 67 94 29 08', href: 'tel:+33767942908' },
     { icon: HiMail, label: 'r.mdesignofficiel@gmail.com', href: 'mailto:r.mdesignofficiel@gmail.com' },
     { icon: HiClock, label: 'Lundi au Vendredi - de 8h00 à 19h00' },
@@ -105,18 +109,25 @@ export default function ContactSection() {
           </form>
         </motion.div>
 
-        {/* Google Maps */}
-        <div className="mt-12 rounded-xl overflow-hidden shadow-md">
-          <iframe
-            title="R.M_Design Location"
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2625.9662736892817!2d2.4316478!3d48.8462089!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e6729b02c3e9e7%3A0x3b9c3e3e3e3e3e3e!2s14%20Rue%20Robert%20Giraudineau%2C%2094300%20Vincennes%2C%20France!5e0!3m2!1sfr!2sfr!4v1"
-            width="100%"
-            height="350"
-            style={{ border: 0 }}
-            allowFullScreen=""
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-          />
+        {/* Google Map Preview */}
+        <div className="mt-12 rounded-xl overflow-hidden shadow-md bg-white">
+          <div className="p-10 text-center">
+            <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-rm-light-blue text-white">
+              <HiLocationMarker className="h-10 w-10" />
+            </div>
+            <p className="text-sm uppercase tracking-wider text-rm-light-blue mb-3">Localisation</p>
+            <h3 className="font-display text-2xl md:text-3xl tracking-wide mb-3 text-gray-900">
+              Ouvrir dans Google Maps
+            </h3>
+            <a
+              href="https://maps.app.goo.gl/tAUjmnxhVkXf29Yy5"
+              target="_blank"
+              rel="noreferrer noopener"
+              className="inline-flex items-center justify-center rounded-full bg-rm-blue px-6 py-3 text-sm font-semibold text-white hover:bg-blue-800 transition-colors"
+            >
+              Ouvrir dans Google Maps
+            </a>
+          </div>
         </div>
       </div>
     </section>

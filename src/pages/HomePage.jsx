@@ -3,7 +3,6 @@ import HeroSection from '../components/home/HeroSection'
 import AboutSection from '../components/home/AboutSection'
 import ServicesGrid from '../components/home/ServicesGrid'
 import DevisCallout from '../components/home/DevisCallout'
-import ReviewsCarousel from '../components/home/ReviewsCarousel'
 import ContactSection from '../components/home/ContactSection'
 
 export default function HomePage() {
@@ -18,7 +17,6 @@ export default function HomePage() {
       <AboutSection />
       <DevisCallout />
       <ServicesGrid />
-      <ReviewsCarousel />
       <ContactSection />
     </motion.div>
   )
