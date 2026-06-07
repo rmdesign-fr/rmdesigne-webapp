@@ -227,13 +227,21 @@ export default function ProductManager() {
               required
               className="w-full bg-rm-dark border border-white/10 rounded-lg px-4 py-3 text-white placeholder-rm-muted focus:outline-none focus:border-rm-pink transition-colors"
             />
-            <input
-              type="number"
-              placeholder="Stock"
-              value={form.stock}
-              onChange={(e) => setForm({ ...form, stock: e.target.value })}
-              className="w-full bg-rm-dark border border-white/10 rounded-lg px-4 py-3 text-white placeholder-rm-muted focus:outline-none focus:border-rm-pink transition-colors"
-            />
+            {!form.surCommande && !form.displayOnly ? (
+              <input
+                type="number"
+                placeholder="Stock"
+                value={form.stock}
+                onChange={(e) => setForm({ ...form, stock: e.target.value })}
+                className="w-full bg-rm-dark border border-white/10 rounded-lg px-4 py-3 text-white placeholder-rm-muted focus:outline-none focus:border-rm-pink transition-colors"
+              />
+            ) : (
+              <div className="flex items-center justify-center rounded-lg border border-white/10 bg-rm-dark/50 px-4 py-3">
+                <span className="text-xs text-white/40 text-center">
+                  Stock non applicable
+                </span>
+              </div>
+            )}
           </div>
           <select
             value={form.category}
