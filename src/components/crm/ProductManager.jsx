@@ -259,7 +259,7 @@ export default function ProductManager() {
               onChange={(e) => setForm({ ...form, isActive: e.target.checked })}
               className="w-4 h-4 accent-rm-pink"
             />
-            <span className="text-sm text-white">
+            <span className="text-sm text-gray-800">
               Produit actif (visible dans la boutique)
             </span>
           </label>
@@ -272,7 +272,7 @@ export default function ProductManager() {
               }
               className="w-4 h-4 accent-rm-pink"
             />
-            <span className="text-sm text-white">
+            <span className="text-sm text-gray-800">
               Sur commande (afficher sans pouvoir acheter)
             </span>
           </label>
@@ -285,7 +285,7 @@ export default function ProductManager() {
               }
               className="w-4 h-4 accent-rm-pink"
             />
-            <span className="text-sm text-white">
+            <span className="text-sm text-gray-800">
               Mode vitrine (afficher sans bouton d'achat)
             </span>
           </label>
