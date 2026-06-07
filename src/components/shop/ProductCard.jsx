@@ -58,20 +58,26 @@ export default function ProductCard({ product }) {
             {product.description}
           </p>
         )}
-        <p className="text-rm-pink font-mono font-bold text-lg mb-3">
-          {product.price?.toFixed(2)} €
-        </p>
+
+        {/* Price — hidden in vitrine mode */}
+        {!product.displayOnly && (
+          <p className="text-rm-pink font-mono font-bold text-lg mb-3">
+            {product.surCommande
+              ? "Sur devis"
+              : `${product.price?.toFixed(2)} €`}
+          </p>
+        )}
 
         {product.displayOnly ? (
-          <div className="text-center py-2">
+          <div className="text-center py-3 border-t border-gray-100 mt-2">
             <span className="text-xs text-gray-400 uppercase tracking-widest font-mono">
               Collection R.M_Design
             </span>
           </div>
         ) : product.surCommande ? (
-          <Link to="/devis">
-            <Button variant="secondary" fullWidth>
-              Sur commande — Nous contacter
+          <Link to="/devis" className="block">
+            <Button variant="primary" fullWidth>
+              Commander sur devis
             </Button>
           </Link>
         ) : outOfStock ? (
