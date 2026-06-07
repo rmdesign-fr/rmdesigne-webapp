@@ -1,47 +1,82 @@
-import { motion } from 'framer-motion'
-import Button from '../ui/Button'
-import useCartStore from '../../store/cartStore'
+import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+import Button from "../ui/Button";
+import useCartStore from "../../store/cartStore";
 
 export default function ProductCard({ product }) {
-  const addItem = useCartStore(s => s.addItem)
-  const outOfStock = product.stock <= 0
+  const addItem = useCartStore((s) => s.addItem);
+  const openCart = useCartStore((s) => s.openCart);
+  const outOfStock = !product.surCommande && product.stock <= 0;
+
+  const handleAdd = () => {
+    addItem(product);
+    openCart();
+  };
 
   return (
     <motion.div
       whileHover={{ y: -4 }}
-      className="rounded-xl overflow-hidden border border-white/10 hover:border-rm-pink/30 transition-all bg-rm-dark group"
+      className="rounded-xl overflow-hidden border border-gray-200 hover:border-rm-pink/50 transition-all group shadow-sm"
     >
-      <div className="aspect-square overflow-hidden relative">
+      {/* Image */}
+      <div className="aspect-square overflow-hidden relative bg-gray-100">
         <img
-          src={product.images?.[0] || 'https://via.placeholder.com/400?text=Produit'}
+          src={
+            product.images?.[0] ||
+            "https://via.placeholder.com/400?text=Produit"
+          }
           alt={product.name}
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
         />
         {product.category && (
-          <span className="absolute top-3 left-3 bg-rm-pink/90 text-white text-xs px-3 py-1 rounded-full font-bold uppercase tracking-wide">
+          <span className="absolute top-3 left-3 bg-rm-pink text-white text-xs px-3 py-1 rounded-full font-bold uppercase tracking-wide">
             {product.category}
+          </span>
+        )}
+        {product.surCommande && (
+          <span className="absolute top-3 right-3 bg-rm-blue text-white text-xs px-3 py-1 rounded-full font-bold uppercase tracking-wide">
+            Sur commande
           </span>
         )}
         {outOfStock && (
           <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
-            <span className="text-white font-bold text-lg">Rupture de stock</span>
+            <span className="text-white font-bold text-lg">
+              Rupture de stock
+            </span>
           </div>
         )}
       </div>
-      <div className="p-4">
-        <h3 className="font-display text-lg tracking-wide mb-1">{product.name}</h3>
+
+      {/* Content — white background for readability */}
+      <div className="p-4 bg-white">
+        <h3 className="font-display text-lg tracking-wide mb-1 text-gray-900 leading-tight">
+          {product.name}
+        </h3>
+        {product.description && (
+          <p className="text-gray-500 text-sm mb-2 line-clamp-2">
+            {product.description}
+          </p>
+        )}
         <p className="text-rm-pink font-mono font-bold text-lg mb-3">
           {product.price?.toFixed(2)} €
         </p>
-        <Button
-          variant="outline"
-          fullWidth
-          disabled={outOfStock}
-          onClick={() => addItem(product)}
-        >
-          {outOfStock ? 'Indisponible' : 'Ajouter au panier'}
-        </Button>
+
+        {product.surCommande ? (
+          <Link to="/devis">
+            <Button variant="secondary" fullWidth>
+              Sur commande — Nous contacter
+            </Button>
+          </Link>
+        ) : outOfStock ? (
+          <Button variant="outline" fullWidth disabled>
+            Rupture de stock
+          </Button>
+        ) : (
+          <Button variant="primary" fullWidth onClick={handleAdd}>
+            Ajouter au panier
+          </Button>
+        )}
       </div>
     </motion.div>
-  )
+  );
 }
