@@ -227,15 +227,28 @@ export default function ProductManager() {
             className="w-full bg-rm-dark border border-white/10 rounded-lg px-4 py-3 text-white placeholder-rm-muted focus:outline-none focus:border-rm-pink transition-colors resize-none"
           />
           <div className="grid grid-cols-2 gap-4">
-            <input
-              type="number"
-              step="0.01"
-              placeholder="Prix (€)"
-              value={form.price}
-              onChange={(e) => setForm({ ...form, price: e.target.value })}
-              required
-              className="w-full bg-rm-dark border border-white/10 rounded-lg px-4 py-3 text-white placeholder-rm-muted focus:outline-none focus:border-rm-pink transition-colors"
-            />
+            {/* Prix — caché pour mode vitrine */}
+            {!form.displayOnly ? (
+              <input
+                type="number"
+                step="0.01"
+                placeholder={
+                  form.surCommande
+                    ? "Prix indicatif (€) — optionnel"
+                    : "Prix (€) *"
+                }
+                value={form.price}
+                onChange={(e) => setForm({ ...form, price: e.target.value })}
+                required={!form.surCommande}
+                className="w-full bg-rm-dark border border-white/10 rounded-lg px-4 py-3 text-white placeholder-rm-muted focus:outline-none focus:border-rm-pink transition-colors"
+              />
+            ) : (
+              <div className="flex items-center justify-center rounded-lg border border-white/10 bg-rm-dark/50 px-4 py-3">
+                <span className="text-xs text-white/40 text-center">
+                  Prix non applicable (vitrine)
+                </span>
+              </div>
+            )}
             {!form.surCommande && !form.displayOnly ? (
               <input
                 type="number"
