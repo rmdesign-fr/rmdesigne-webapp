@@ -1,9 +1,10 @@
-import { motion } from 'framer-motion'
-import HeroSection from '../components/home/HeroSection'
-import AboutSection from '../components/home/AboutSection'
-import ServicesGrid from '../components/home/ServicesGrid'
-import DevisCallout from '../components/home/DevisCallout'
-import ContactSection from '../components/home/ContactSection'
+import { motion } from "framer-motion";
+import HeroSection from "../components/home/HeroSection";
+import AboutSection from "../components/home/AboutSection";
+import ServicesGrid from "../components/home/ServicesGrid";
+import DevisCallout from "../components/home/DevisCallout";
+import ContactSection from "../components/home/ContactSection";
+import ReviewsCarousel from "../components/home/ReviewsCarousel";
 
 export default function HomePage() {
   return (
@@ -17,7 +18,8 @@ export default function HomePage() {
       <AboutSection />
       <DevisCallout />
       <ServicesGrid />
+      <ReviewsCarousel />
       <ContactSection />
     </motion.div>
-  )
+  );
 }

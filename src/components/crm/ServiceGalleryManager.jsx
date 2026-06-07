@@ -1,84 +1,84 @@
-import { useState, useEffect } from 'react'
-import { HiPlus, HiTrash, HiPencil } from 'react-icons/hi'
-import api from '../../services/api'
+import { useState, useEffect } from "react";
+import { HiPlus, HiTrash, HiPencil } from "react-icons/hi";
+import api from "../../services/api";
 
 const SERVICES = [
-  { slug: 'preparation-moteur', label: 'Préparation Moteur' },
-  { slug: 'sablage-microbillage', label: 'Sablage / Microbillage' },
-  { slug: 'peinture-automobile', label: 'Peinture Automobile' },
-  { slug: 'vente-auto', label: 'Vente Auto' },
-  { slug: 'restauration', label: 'Restauration' },
-]
+  { slug: "preparation-moteur", label: "Préparation Moteur" },
+  { slug: "sablage-microbillage", label: "Sablage / Microbillage" },
+  { slug: "peinture-automobile", label: "Peinture Automobile" },
+  { slug: "vente-auto", label: "Vente Auto" },
+  { slug: "restauration", label: "Restauration" },
+];
 
 export default function ServiceGalleryManager() {
-  const [selectedService, setSelectedService] = useState(SERVICES[0].slug)
-  const [gallery, setGallery] = useState([])
-  const [loading, setLoading] = useState(false)
-  const [uploading, setUploading] = useState(false)
-  const [editingItem, setEditingItem] = useState(null)
+  const [selectedService, setSelectedService] = useState(SERVICES[0].slug);
+  const [gallery, setGallery] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [editingItem, setEditingItem] = useState(null);
 
   useEffect(() => {
-    fetchGallery()
-  }, [selectedService])
+    fetchGallery();
+  }, [selectedService]);
 
   const fetchGallery = async () => {
-    setLoading(true)
+    setLoading(true);
     try {
-      const { data } = await api.get(`/api/services/${selectedService}/gallery`)
-      setGallery(data)
+      const { data } = await api.get(
+        `/api/services/${selectedService}/gallery`,
+      );
+      setGallery(data);
     } catch (err) {
-      console.error(err)
-      alert('Erreur lors du chargement de la galerie')
+      console.error(err);
+      alert("Erreur lors du chargement de la galerie");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const handleUpload = async (e) => {
-    const file = e.target.files?.[0]
-    if (!file) return
+    const file = e.target.files?.[0];
+    if (!file) return;
 
-    setUploading(true)
-    const formData = new FormData()
-    formData.append('image', file)
-    formData.append('order', gallery.length.toString())
+    setUploading(true);
+    const formData = new FormData();
+    formData.append("image", file);
+    formData.append("order", gallery.length.toString());
 
     try {
-      await api.post(`/api/services/${selectedService}/gallery`, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      })
-      fetchGallery()
+      await api.post(`/api/services/${selectedService}/gallery`, formData);
+      fetchGallery();
     } catch (err) {
-      console.error(err)
-      alert('Erreur lors de l\'upload')
+      console.error(err);
+      alert("Erreur lors de l'upload");
     } finally {
-      setUploading(false)
-      e.target.value = ''
+      setUploading(false);
+      e.target.value = "";
     }
-  }
+  };
 
   const handleUpdate = async (id, title) => {
     try {
-      await api.put(`/api/services/gallery/${id}`, { title })
-      setEditingItem(null)
-      fetchGallery()
+      await api.put(`/api/services/gallery/${id}`, { title });
+      setEditingItem(null);
+      fetchGallery();
     } catch (err) {
-      console.error(err)
-      alert('Erreur lors de la mise à jour')
+      console.error(err);
+      alert("Erreur lors de la mise à jour");
     }
-  }
+  };
 
   const handleDelete = async (id) => {
-    if (!confirm('Supprimer cette image ?')) return
+    if (!confirm("Supprimer cette image ?")) return;
 
     try {
-      await api.delete(`/api/services/gallery/${id}`)
-      fetchGallery()
+      await api.delete(`/api/services/gallery/${id}`);
+      fetchGallery();
     } catch (err) {
-      console.error(err)
-      alert('Erreur lors de la suppression')
+      console.error(err);
+      alert("Erreur lors de la suppression");
     }
-  }
+  };
 
   return (
     <div>
@@ -121,10 +121,13 @@ export default function ServiceGalleryManager() {
       ) : (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {gallery.map((item) => (
-            <div key={item.id} className="group relative aspect-square bg-gray-100 rounded-lg overflow-hidden">
+            <div
+              key={item.id}
+              className="group relative aspect-square bg-gray-100 rounded-lg overflow-hidden"
+            >
               <img
                 src={item.imageUrl}
-                alt={item.title || 'Gallery image'}
+                alt={item.title || "Gallery image"}
                 className="w-full h-full object-cover"
               />
               <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
@@ -153,13 +156,21 @@ export default function ServiceGalleryManager() {
 
       {/* Edit Modal */}
       {editingItem && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setEditingItem(null)}>
-          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4" onClick={(e) => e.stopPropagation()}>
+        <div
+          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+          onClick={() => setEditingItem(null)}
+        >
+          <div
+            className="bg-white rounded-lg p-6 max-w-md w-full mx-4"
+            onClick={(e) => e.stopPropagation()}
+          >
             <h3 className="text-xl font-bold mb-4">Modifier l'image</h3>
             <input
               type="text"
-              value={editingItem.title || ''}
-              onChange={(e) => setEditingItem({ ...editingItem, title: e.target.value })}
+              value={editingItem.title || ""}
+              onChange={(e) =>
+                setEditingItem({ ...editingItem, title: e.target.value })
+              }
               placeholder="Titre (optionnel)"
               className="w-full px-4 py-2 border rounded-lg mb-4"
             />
@@ -181,5 +192,5 @@ export default function ServiceGalleryManager() {
         </div>
       )}
     </div>
-  )
+  );
 }

@@ -1,52 +1,54 @@
-import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
-import { format } from 'date-fns'
-import CalendarPicker from '../components/devis/CalendarPicker'
-import TimeSlotGrid from '../components/devis/TimeSlotGrid'
-import BookingForm from '../components/devis/BookingForm'
-import { getAvailableSlots, createBooking } from '../services/bookingService'
-import { HiCheckCircle } from 'react-icons/hi'
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { format } from "date-fns";
+import CalendarPicker from "../components/devis/CalendarPicker";
+import TimeSlotGrid from "../components/devis/TimeSlotGrid";
+import BookingForm from "../components/devis/BookingForm";
+import { getAvailableSlots, createBooking } from "../services/bookingService";
+import { HiCheckCircle } from "react-icons/hi";
 
 export default function DevisPage() {
-  const [selectedDate, setSelectedDate] = useState(null)
-  const [selectedTime, setSelectedTime] = useState(null)
-  const [slots, setSlots] = useState([])
-  const [loadingSlots, setLoadingSlots] = useState(false)
-  const [submitting, setSubmitting] = useState(false)
-  const [success, setSuccess] = useState(false)
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedTime, setSelectedTime] = useState(null);
+  const [slots, setSlots] = useState([]);
+  const [loadingSlots, setLoadingSlots] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   useEffect(() => {
-    if (!selectedDate) return
+    if (!selectedDate) return;
     const fetchSlots = async () => {
-      setLoadingSlots(true)
-      setSelectedTime(null)
+      setLoadingSlots(true);
+      setSelectedTime(null);
       try {
-        const data = await getAvailableSlots(format(selectedDate, 'yyyy-MM-dd'))
-        setSlots(Array.isArray(data?.slots) ? data.slots : [])
+        const data = await getAvailableSlots(
+          format(selectedDate, "yyyy-MM-dd"),
+        );
+        setSlots(Array.isArray(data?.slots) ? data.slots : []);
       } catch (err) {
-        setSlots([])
+        setSlots([]);
       } finally {
-        setLoadingSlots(false)
+        setLoadingSlots(false);
       }
-    }
-    fetchSlots()
-  }, [selectedDate])
+    };
+    fetchSlots();
+  }, [selectedDate]);
 
   const handleSubmit = async (formData) => {
-    setSubmitting(true)
+    setSubmitting(true);
     try {
       await createBooking({
         ...formData,
-        date: format(selectedDate, 'yyyy-MM-dd'),
+        date: format(selectedDate, "yyyy-MM-dd"),
         time: selectedTime,
-      })
-      setSuccess(true)
+      });
+      setSuccess(true);
     } catch (err) {
-      console.error(err)
+      console.error(err);
     } finally {
-      setSubmitting(false)
+      setSubmitting(false);
     }
-  }
+  };
 
   if (success) {
     return (
@@ -59,12 +61,12 @@ export default function DevisPage() {
           <HiCheckCircle className="text-rm-success text-6xl mx-auto mb-4" />
           <h2 className="font-display text-3xl mb-2">Rendez-vous confirmé !</h2>
           <p className="text-rm-muted">
-            Nous avons bien reçu votre demande. Un email de confirmation vous a été envoyé.
-            Nous vous contacterons rapidement.
+            Nous avons bien reçu votre demande. Un email de confirmation vous a
+            été envoyé. Nous vous contacterons rapidement.
           </p>
         </motion.div>
       </div>
-    )
+    );
   }
 
   return (
@@ -83,10 +85,10 @@ export default function DevisPage() {
 
       <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6">
         <div className="text-center mb-10">
-          <h1 className="font-display text-4xl md:text-6xl tracking-wider mb-2">
+          <h1 className="font-display text-4xl md:text-6xl tracking-wider mb-2 text-white">
             Réserver une prospection
           </h1>
-          <p className="text-rm-muted text-lg">
+          <p className="text-white/70 text-lg">
             Choisissez une date et un créneau disponible
           </p>
         </div>
@@ -113,5 +115,5 @@ export default function DevisPage() {
         />
       </div>
     </motion.div>
-  )
+  );
 }
