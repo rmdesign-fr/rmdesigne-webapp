@@ -37,6 +37,9 @@ export default function ProductManager() {
       queryClient.invalidateQueries({ queryKey: ["admin-products-all"] });
       closeModal();
     },
+    onError: (err) => {
+      alert("Erreur : " + (err.response?.data?.message || err.message));
+    },
   });
 
   const updateMut = useMutation({
@@ -44,6 +47,12 @@ export default function ProductManager() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-products-all"] });
       closeModal();
+    },
+    onError: (err) => {
+      alert(
+        "Erreur lors de la mise à jour : " +
+          (err.response?.data?.message || err.message),
+      );
     },
   });
 
