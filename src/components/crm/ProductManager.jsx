@@ -22,6 +22,7 @@ export default function ProductManager() {
     stock: "",
     isActive: true,
     surCommande: false,
+    displayOnly: false,
   });
   const [files, setFiles] = useState(null);
 
@@ -63,6 +64,7 @@ export default function ProductManager() {
       stock: "",
       isActive: true,
       surCommande: false,
+      displayOnly: false,
     });
     setFiles(null);
   };
@@ -77,6 +79,7 @@ export default function ProductManager() {
       stock: p.stock,
       isActive: p.isActive,
       surCommande: p.surCommande || false,
+      displayOnly: p.displayOnly || false,
     });
     setModalOpen(true);
   };
@@ -154,6 +157,11 @@ export default function ProductManager() {
                       {!p.surCommande && p.stock <= 0 && (
                         <span className="px-2 py-1 rounded-full text-xs font-bold bg-yellow-500/20 text-yellow-400">
                           Rupture
+                        </span>
+                      )}
+                      {p.displayOnly && (
+                        <span className="px-2 py-1 rounded-full text-xs font-bold bg-purple-500/20 text-purple-400">
+                          Vitrine
                         </span>
                       )}
                     </div>
@@ -266,6 +274,19 @@ export default function ProductManager() {
             />
             <span className="text-sm text-white">
               Sur commande (afficher sans pouvoir acheter)
+            </span>
+          </label>
+          <label className="flex items-center gap-3 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={form.displayOnly}
+              onChange={(e) =>
+                setForm({ ...form, displayOnly: e.target.checked })
+              }
+              className="w-4 h-4 accent-rm-pink"
+            />
+            <span className="text-sm text-white">
+              Mode vitrine (afficher sans bouton d'achat)
             </span>
           </label>
           <Button

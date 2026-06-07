@@ -6,7 +6,8 @@ import useCartStore from "../../store/cartStore";
 export default function ProductCard({ product }) {
   const addItem = useCartStore((s) => s.addItem);
   const openCart = useCartStore((s) => s.openCart);
-  const outOfStock = !product.surCommande && product.stock <= 0;
+  const outOfStock =
+    !product.surCommande && !product.displayOnly && product.stock <= 0;
 
   const handleAdd = () => {
     addItem(product);
@@ -61,7 +62,13 @@ export default function ProductCard({ product }) {
           {product.price?.toFixed(2)} €
         </p>
 
-        {product.surCommande ? (
+        {product.displayOnly ? (
+          <div className="text-center py-2">
+            <span className="text-xs text-gray-400 uppercase tracking-widest font-mono">
+              Collection R.M_Design
+            </span>
+          </div>
+        ) : product.surCommande ? (
           <Link to="/devis">
             <Button variant="secondary" fullWidth>
               Sur commande — Nous contacter
