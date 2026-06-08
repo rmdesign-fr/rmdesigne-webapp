@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import Button from "../ui/Button";
 import useCartStore from "../../store/cartStore";
@@ -62,9 +61,7 @@ export default function ProductCard({ product }) {
         {/* Price — hidden in vitrine mode */}
         {!product.displayOnly && (
           <p className="text-rm-pink font-mono font-bold text-lg mb-3">
-            {product.surCommande
-              ? "Sur devis"
-              : `${product.price?.toFixed(2)} €`}
+            {product.price?.toFixed(2)} €
           </p>
         )}
 
@@ -74,12 +71,6 @@ export default function ProductCard({ product }) {
               Collection R.M_Design
             </span>
           </div>
-        ) : product.surCommande ? (
-          <Link to="/devis" className="block">
-            <Button variant="primary" fullWidth>
-              Commander sur devis
-            </Button>
-          </Link>
         ) : outOfStock ? (
           <Button variant="outline" fullWidth disabled>
             Rupture de stock
