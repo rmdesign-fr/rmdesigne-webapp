@@ -42,9 +42,10 @@ export default function ServicePage() {
     const fetchGallery = async () => {
       try {
         const { data } = await api.get(`/api/services/${slug}/gallery`)
-        setGallery(data)
+        setGallery(Array.isArray(data) ? data : [])
       } catch (err) {
         console.error('Failed to fetch gallery:', err)
+        setGallery([])
       } finally {
         setLoading(false)
       }
@@ -99,7 +100,7 @@ export default function ServicePage() {
             <div className="flex justify-center items-center py-20">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-rm-blue" />
             </div>
-          ) : gallery.length > 0 ? (
+          ) : Array.isArray(gallery) && gallery.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {gallery.map((item, index) => (
                 <motion.div

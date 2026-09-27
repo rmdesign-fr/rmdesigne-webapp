@@ -24,7 +24,9 @@ export default function useCalendar() {
   const nextMonth = () => setCurrentMonth(addMonths(currentMonth, 1))
   const prevMonth = () => setCurrentMonth(subMonths(currentMonth, 1))
 
-  const monthLabel = format(currentMonth, 'MMMM yyyy', { locale: fr }).toUpperCase()
+  const monthLabel = currentMonth
+    ? (format(currentMonth, 'MMMM yyyy', { locale: fr }) || '').toUpperCase()
+    : ''
 
   const getDays = () => {
     const monthStart = startOfMonth(currentMonth)

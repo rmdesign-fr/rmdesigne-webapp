@@ -159,7 +159,7 @@ export default function ReviewManager() {
                 </div>
                 <p className="text-rm-muted text-sm mb-2">"{r.text}"</p>
                 <StarRating rating={r.rating} size="text-sm" />
-                {r.images && r.images.length > 0 && (
+                {Array.isArray(r.images) && r.images.length > 0 && (
                   <div className="flex gap-2 mt-3">
                     {r.images.map((img, idx) => (
                       <img

@@ -8,17 +8,23 @@ import { getApprovedReviews } from "../../services/reviewService";
 export default function ReviewsCarousel() {
   const [current, setCurrent] = useState(0);
   const [paused, setPaused] = useState(false);
-  const { data: reviews = [], isLoading } = useQuery({
+  const { data: rawReviews = [], isLoading } = useQuery({
     queryKey: ["reviews"],
     queryFn: getApprovedReviews,
   });
 
+  const reviews = Array.isArray(rawReviews)
+    ? rawReviews
+    : Array.isArray(rawReviews?.reviews)
+    ? rawReviews.reviews
+    : [];
+
   const next = useCallback(
-    () => setCurrent((c) => (c + 1) % reviews.length),
+    () => setCurrent((c) => (c + 1) % (reviews.length || 1)),
     [reviews.length],
   );
   const prev = useCallback(
-    () => setCurrent((c) => (c - 1 + reviews.length) % reviews.length),
+    () => setCurrent((c) => (c - 1 + (reviews.length || 1)) % (reviews.length || 1)),
     [reviews.length],
   );
 
@@ -34,7 +40,8 @@ export default function ReviewsCarousel() {
 
   if (isLoading || !reviews.length) return null;
 
-  const review = reviews[current];
+  const review = reviews[current] || reviews[0];
+  if (!review) return null;
 
   return (
     <section id="avis" className="py-20 md:py-28 bg-rm-bg">
@@ -58,14 +65,14 @@ export default function ReviewsCarousel() {
           <div className="grid md:grid-cols-2">
             {/* Image side */}
             <div className="aspect-square md:aspect-auto overflow-hidden bg-gray-100">
-              {review.images && review.images.length > 0 ? (
+              {Array.isArray(review.images) && review.images.length > 0 ? (
                 <motion.img
                   key={current}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.4 }}
                   src={review.images[0]}
-                  alt={review.name}
+                  alt={review.name || "Avis client"}
                   className="w-full h-full object-cover"
                 />
               ) : (
@@ -86,15 +93,19 @@ export default function ReviewsCarousel() {
                 transition={{ duration: 0.4 }}
               >
                 <p className="text-rm-muted text-xs tracking-widest uppercase mb-3 font-mono">
-                  CLIENT POUR {review.service.toUpperCase()}
+                  {review.service
+                    ? `CLIENT POUR ${String(review.service).toUpperCase()}`
+                    : "AVIS CLIENT"}
                 </p>
                 <h3 className="font-display text-2xl md:text-3xl tracking-wide mb-4 text-gray-900">
-                  {review.name}
+                  {review.name || "Client"}
                 </h3>
-                <p className="text-gray-600 leading-relaxed text-lg mb-6">
-                  &ldquo;{review.text}&rdquo;
-                </p>
-                <StarRating rating={review.rating} />
+                {review.text && (
+                  <p className="text-gray-600 leading-relaxed text-lg mb-6">
+                    &ldquo;{review.text}&rdquo;
+                  </p>
+                )}
+                <StarRating rating={review.rating ?? 5} />
               </motion.div>
             </div>
           </div>
